@@ -11,7 +11,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.util.List;
-
+import java.util.Optional;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.stream.Stream;
@@ -72,17 +72,14 @@ public class TransactionServiceImplTest {
 
     @Test
     void testDeleteTransaction() {
-        // Transaction transaction = new Transaction();
-        // when(transactionRepository.save(any())).thenCallRealMethod();
-        // Transaction savedTransaction = transactionServiceImpl.createTransaction(transaction);
-        // transactionServiceImpl.deleteTransaction(savedTransaction);
+        Transaction transaction = new Transaction();
+        when(transactionRepository.existsById(any())).thenReturn(true);
+        
 
-        // //When
-        // Transaction retrievedTransaction = this.transactionServiceImpl.getTransactionById(savedTransaction.getId());
-        // List<Transaction> allTransactions = (List<Transaction>) this.transactionServiceImpl.getAllTransactions();
-        // //Then
-        // assertNull(retrievedTransaction);
-        // assertTrue(allTransactions.stream().allMatch((tr) -> tr.getId() != savedTransaction.getId()));
+         //Then
+        transactionServiceImpl.deleteTransaction(transaction);
+       
+        
 
 
     }
@@ -90,15 +87,46 @@ public class TransactionServiceImplTest {
     @Test
     void testGetAllTransactions() {
 
+        List<Transaction> transactions = new ArrayList<>();
+       
+
+        for(int i =0;i < 4;i++){
+            transactions.add(new Transaction(i*30+2,"test"));
+        }
+       
+        when(transactionRepository.findAll()).thenReturn(transactions);
+        List<Transaction> retrievedTransactions = (List<Transaction>) this.transactionServiceImpl.getAllTransactions();
+        assertTrue(retrievedTransactions.stream()
+                        .allMatch((rT) -> transactions
+                        .stream()
+                        .anyMatch((tr)-> tr.getId() == rT.getId())));
+
     }
 
     @Test
     void testGetTransactionById() {
+        long id = 10l;
+        when(transactionRepository.existsById(id)).thenReturn(true);
+
+        Transaction savedTransaction = new Transaction(id,null,100,"test");
+        when(this.transactionRepository.findById(id)).thenReturn(Optional.of(savedTransaction));
+
+
+        Transaction retrievedTransaction = this.transactionServiceImpl.getTransactionById(id);
+        assertTrue(savedTransaction.getId() == retrievedTransaction.getId());
+        assertEquals(savedTransaction, retrievedTransaction);
 
     }
 
     @Test
     void testUpdateTransaction() {
+        long id = 10l;
+        when(transactionRepository.existsById(id)).thenReturn(true);
+        Transaction updatedTransaction = new Transaction(id,null,1000,"testUpdated");
+        when(transactionRepository.save(any())).thenReturn(updatedTransaction);
+        
+        Transaction transaction = transactionServiceImpl.updateTransaction(updatedTransaction);
+        assertEquals(transaction,updatedTransaction);
 
     }
 }

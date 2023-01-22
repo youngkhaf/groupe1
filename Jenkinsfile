@@ -25,7 +25,7 @@ pipeline{
 
         stage('Build Docker image') {
                       steps{
-                           sh 'docker build -t groupe1/groupe1:latest .'
+                           sh 'docker build -t sirsoir2022/groupe1:latest .'
                       }
         }
 

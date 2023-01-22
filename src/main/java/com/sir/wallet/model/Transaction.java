@@ -28,10 +28,15 @@ public class Transaction {
         this.amount = amount;
         this.type = type;
     }
+    public Transaction(int amount,String type){
+        this.wallet = new Wallet("Test", 0);
+        this.amount = amount;
+        this.type = type;
+    }
 
     public Transaction(){
+        this.wallet = new Wallet("Test", 0);
         this.amount = 10;
         this.type = "test";
-        this.wallet = new Wallet("Test", 0);
     }
 }

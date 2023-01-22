@@ -27,4 +27,16 @@ public class Wallet {
         this.name = name;
         this.balance = balance;
     }
+
+    public Wallet() {
+    }
+
+    public Wallet(long id2, String name, int i) {
+        this.id = id2;
+        this.name = name;
+        this.balance = i;
+    }
+
+    public Wallet(int i, String string) {
+    }
 }
