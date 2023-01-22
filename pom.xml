@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.sir.soir</groupId>
-	<artifactId>sir2022</artifactId>
+	<artifactId>groupe1</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>sir2022</name>
 	<description>Demo project for Spring Boot</description>
@@ -31,7 +31,12 @@
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-
+	<dependency>
+		<groupId>org.projectlombok</groupId>
+		<artifactId>lombok</artifactId>
+		<version>1.18.24</version>
+		<scope>provided</scope>
+	</dependency>
 		<!-- ajouter cumcumber-java -->
 		<dependency>
 			<groupId>io.cucumber</groupId>

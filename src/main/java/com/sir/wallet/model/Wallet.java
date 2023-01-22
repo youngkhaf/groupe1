@@ -5,9 +5,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 
 @Entity
+@AllArgsConstructor
+@Getter
+@Setter
 public class Wallet {
 
     @Id
@@ -16,4 +22,9 @@ public class Wallet {
     private long balance;
 
     // Constructors, getters, and setters
+
+    public Wallet(String name,long balance){
+        this.name = name;
+        this.balance = balance;
+    }
 }
