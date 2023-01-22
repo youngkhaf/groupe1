@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sir.wallet.controller.TransactionController;
 import com.sir.wallet.controller.WalletController;
 import com.sir.wallet.cucumber.CucumberTest;
@@ -57,6 +58,15 @@ public class TransactionStepDefs {
 
 
     @Autowired
+    TestRestTemplate testRestTemplate;
+
+    @Autowired
+    MockMvc mockMvc;
+
+    @LocalServerPort
+    int port;
+
+    @Autowired
     TransactionRepository transactionRepository;
 
 
@@ -65,19 +75,29 @@ public class TransactionStepDefs {
 
     @Autowired
     WalletController walletController;
+    MockHttpServletResponse response;
 
 
 
     @Then("the wallet with ID {int} should have a balance of {int}")
-    public void the_wallet_with_ID_should_have_a_balance_of(int id, int balance) {
-        Wallet wallet = this.walletController.getWallet(id);
-        assertEquals(wallet.getBalance(), balance);
+    public void the_wallet_with_ID_should_have_a_balance_of(int i, int i2) throws Exception{
+        ObjectMapper objectMapper = new ObjectMapper();
+        byte[] requestBody = objectMapper.writeValueAsBytes(wallet);
+                        RequestBuilder request = MockMvcRequestBuilders
+                .get("/api/wallets")
+                .content(requestBody)
+                .contentType(MediaType.APPLICATION_JSON); // "application/json"
+
+
+        //When
+        MvcResult mvcResult = mockMvc.perform(request).andReturn();
+        response = mvcResult.getResponse();
         
     }
 
     @Then("the response status should be {int}")
     public void the_response_status_should_be(int i) {
-        
+        assertEquals(response.getStatus(),i);
     }
 
     @When("I POST a transaction with wallet ID {int} and amount {int} and type {string} to the {string} endpoint")
@@ -91,9 +111,12 @@ public class TransactionStepDefs {
     @Given("a wallet with ID {int} and name {string} and balance {int}")
     public void a_wallet_with_ID_and_name_and_balance(int id, String name, int balance) {
         wallet = new Wallet(id,name,balance);
-        
     }
 
+    @Then("the wallet should not be retrievable")
+    public void the_wallet_should_not_be_retrievable() {
+        assertThrows(IllegalArgumentException.class, ()-> this.walletController.getWallet(wallet.getId())); 
+    }
 
 
 

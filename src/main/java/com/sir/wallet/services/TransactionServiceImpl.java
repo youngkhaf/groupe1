@@ -1,7 +1,10 @@
 package com.sir.wallet.services;
 
 import com.sir.wallet.model.Transaction;
+import com.sir.wallet.model.Wallet;
 import com.sir.wallet.repository.TransactionRepository;
+
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,8 +15,19 @@ public class TransactionServiceImpl implements TransactionService {
     @Autowired
     TransactionRepository transactionRepository;
 
+    @Autowired
+    WalletServiceImpl walletServiceImpl;
+
     @Override
     public Transaction createTransaction(Transaction transaction) {
+        long walletId = Optional.of(transaction.getWallet()).orElse(new Wallet()).getId();
+        Wallet wallet = walletServiceImpl.getWalletById(transaction.getWallet().getId());
+
+        int multiplicator = transaction.getType() == "deposit" ? 1 : -1;
+        wallet.setBalance(wallet.getBalance() - (transaction.getAmount() * multiplicator));
+
+        this.walletServiceImpl.updateWallet(walletId, wallet);
+
         return transactionRepository.save(transaction);
     }
 

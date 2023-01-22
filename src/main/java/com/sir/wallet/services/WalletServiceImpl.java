@@ -12,6 +12,8 @@ public class WalletServiceImpl implements WalletService {
     @Autowired
     WalletRepository walletRepository;
 
+    
+
     @Override
     public Wallet saveWallet(Wallet wallet) {
         return walletRepository.save(wallet);
