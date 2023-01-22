@@ -58,7 +58,7 @@ public class TransactionControllerTest {
     void testGetAllTransactions() throws Exception{
                 //Given
                 RequestBuilder request = MockMvcRequestBuilders
-                .get("/api/transactions/transactions")
+                .get("/transactions")
                 .contentType(MediaType.APPLICATION_JSON); // "application/json"
 
         when(personService.getAllTransactions()).thenReturn(List.of(new Transaction(1000,"test")));

@@ -4,13 +4,16 @@ import com.sir.wallet.model.Transaction;
 import com.sir.wallet.services.TransactionService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
-@RequestMapping("/api/transaction")
+@RequestMapping("/transactions")
 public class TransactionController {
 
 
@@ -21,28 +24,29 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
-    @PostMapping("/transactions")
-    public Transaction createTransaction(@RequestBody Transaction transaction) {
-        return transactionService.createTransaction(transaction);
+    @PostMapping("")
+    public ResponseEntity<Transaction> createTransaction(@RequestBody Transaction transaction) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(transactionService.createTransaction(transaction));
     }
 
-    @GetMapping("/transactions")
-    public Iterable<Transaction> getAllTransactions() {
-        return transactionService.getAllTransactions();
+    @GetMapping("")
+    public ResponseEntity<Iterable<Transaction>> getAllTransactions() {
+        return ResponseEntity.ok(transactionService.getAllTransactions());
     }
 
     @GetMapping(value="/{id}")
-    public Transaction getTransaction(@RequestParam("id") long id) {
-        return this.transactionService.getTransactionById(id);
+    public ResponseEntity<Transaction> getTransaction(@RequestParam("id") long id) {
+        return ResponseEntity.ok(this.transactionService.getTransactionById(id));
     }
-    @PutMapping("/transactions")
-    public Transaction updateTransaction(@RequestBody Transaction transaction) {
-        return transactionService.updateTransaction(transaction);
+    @PutMapping("")
+    public ResponseEntity<Transaction> updateTransaction(@RequestBody Transaction transaction) {
+        return ResponseEntity.status(HttpStatus.CREATED).body((transactionService.updateTransaction(transaction)));
     }
 
     @DeleteMapping("")
-    public void deleteTransaction(@RequestBody Transaction transaction){
-        this.transactionService.deleteTransaction(transaction);
+    public ResponseEntity<Object> deleteTransaction(@RequestBody Transaction transaction){
+         this.transactionService.deleteTransaction(transaction);
+         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
     
 }

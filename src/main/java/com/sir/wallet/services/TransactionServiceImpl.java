@@ -3,6 +3,7 @@ package com.sir.wallet.services;
 import com.sir.wallet.model.Transaction;
 import com.sir.wallet.model.Wallet;
 import com.sir.wallet.repository.TransactionRepository;
+import com.sir.wallet.repository.WalletRepository;
 
 import java.util.Optional;
 
@@ -12,21 +13,26 @@ import org.springframework.stereotype.Service;
 @Service
 public class TransactionServiceImpl implements TransactionService {
 
-    @Autowired
     TransactionRepository transactionRepository;
+    WalletRepository walletServiceImpl;
 
-    @Autowired
-    WalletServiceImpl walletServiceImpl;
+    public TransactionServiceImpl(TransactionRepository transactionRepository,WalletRepository walletServiceImpl){
+        this.transactionRepository = transactionRepository;
+        this.walletServiceImpl = walletServiceImpl;
+    }
 
     @Override
     public Transaction createTransaction(Transaction transaction) {
-        long walletId = Optional.of(transaction.getWallet()).orElse(new Wallet()).getId();
-        Wallet wallet = walletServiceImpl.getWalletById(transaction.getWallet().getId());
+        Wallet wallet = Optional.of(transaction.getWallet()).orElse(new Wallet());
+        // if(wallet != null){
+        //     int multiplicator = transaction.getType() == "deposit" ? 1 : -1;
+        //     wallet.setBalance(wallet.getBalance() - (transaction.getAmount() * multiplicator));
+        //     this.walletServiceImpl.save(wallet);
+        // }
 
-        int multiplicator = transaction.getType() == "deposit" ? 1 : -1;
-        wallet.setBalance(wallet.getBalance() - (transaction.getAmount() * multiplicator));
 
-        this.walletServiceImpl.updateWallet(walletId, wallet);
+
+       
 
         return transactionRepository.save(transaction);
     }
