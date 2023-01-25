@@ -8,7 +8,7 @@ pipeline{
     stages{
         stage('Source') {
             steps{
-                git branch: 'feature-project', url:'https://github.com/youngkhaf/groupe1'
+                git branch: 'main', url:'https://github.com/youngkhaf/groupe1'
             }
         }
         stage('Build') {
