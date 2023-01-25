@@ -29,6 +29,8 @@ public class Wallet {
     }
 
     public Wallet() {
+        this.name = "test";
+        this.balance = 100;
     }
 
     public Wallet(long id2, String name, int i) {

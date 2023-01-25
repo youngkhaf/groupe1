@@ -13,27 +13,21 @@ import org.springframework.stereotype.Service;
 @Service
 public class TransactionServiceImpl implements TransactionService {
 
+    @Autowired
+    WalletRepository walletRepository;
+    @Autowired
     TransactionRepository transactionRepository;
-    WalletRepository walletServiceImpl;
 
-    public TransactionServiceImpl(TransactionRepository transactionRepository,WalletRepository walletServiceImpl){
-        this.transactionRepository = transactionRepository;
-        this.walletServiceImpl = walletServiceImpl;
-    }
+
 
     @Override
     public Transaction createTransaction(Transaction transaction) {
         Wallet wallet = Optional.of(transaction.getWallet()).orElse(new Wallet());
-        // if(wallet != null){
-        //     int multiplicator = transaction.getType() == "deposit" ? 1 : -1;
-        //     wallet.setBalance(wallet.getBalance() - (transaction.getAmount() * multiplicator));
-        //     this.walletServiceImpl.save(wallet);
-        // }
-
-
-
-       
-
+        if(wallet != null){
+            int multiplicator = transaction.getType() == "deposit" ? 1 : -1;
+            wallet.setBalance(wallet.getBalance() + (transaction.getAmount() * multiplicator));
+            //this.walletRepository.save(wallet);
+        }
         return transactionRepository.save(transaction);
     }
 

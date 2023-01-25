@@ -24,21 +24,21 @@ public class WalletController {
         this.walletService = walletService;
     }
 
-    @PostMapping("/wallets")
+    @PostMapping("")
     public ResponseEntity<Wallet> createWallet(@RequestBody Wallet wallet) {
         return ResponseEntity.status(HttpStatus.CREATED).body(walletService.saveWallet(wallet));
     }
 
-    @GetMapping("/wallets")
+    @GetMapping("")
     public ResponseEntity<Iterable<Wallet>> getAllWallets() {
         return ResponseEntity.ok(walletService.getAllWallets());
     }
 
-    @GetMapping(value="/{id}")
-    public ResponseEntity<Wallet> getWallet(@RequestParam("id") long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<Wallet> getWallet(@PathVariable("id") long id) {
         return ResponseEntity.ok(this.walletService.getWalletById(id));
     }
-    @PutMapping("/wallets")
+    @PutMapping("")
     public ResponseEntity<Wallet> updateWallet(@RequestBody Wallet wallet) {
         return ResponseEntity.status(HttpStatus.CREATED).body((walletService.saveWallet(wallet)));
     }
