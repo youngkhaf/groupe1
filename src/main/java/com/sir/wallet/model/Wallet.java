@@ -17,6 +17,7 @@ import lombok.Setter;
 public class Wallet {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String name;
     private long balance;

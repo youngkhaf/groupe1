@@ -6,12 +6,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.sir.wallet.model.Transaction;
+import com.sir.wallet.model.Wallet;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -20,10 +22,26 @@ public class TransactionRepositoryTest {
     @Autowired
     TransactionRepository tansactionRepository;
 
+    @Autowired
+    WalletRepository walletRepository;
+
+    Wallet testWallet;
+   
+
+    @BeforeEach
+    void saveWallet(){
+        Wallet toSave = new Wallet();
+        toSave.setId(10l);
+        testWallet = this.walletRepository.save(toSave);
+    }
+
+
     @Test
     void save() {
         //Given
+        
         Transaction tansaction = new Transaction();
+        tansaction.setWallet(testWallet);
 
         //When
         Transaction tansactionResponse = tansactionRepository.save(tansaction);
@@ -37,8 +55,9 @@ public class TransactionRepositoryTest {
 
     @Test
     void update() {
-        //Given
-        Transaction tansaction = tansactionRepository.save(new Transaction());
+        
+        Transaction tansaction = new Transaction();
+        tansaction.setWallet(testWallet);
         tansaction.setType("Ba");
 
         //When
@@ -75,7 +94,9 @@ public class TransactionRepositoryTest {
         //Given
         final Long testId = 50L;
         Transaction tansaction = new Transaction();
-        tansactionRepository.save(tansaction);
+        
+        tansaction.setWallet(testWallet);
+        tansaction.setType("Ba");
 
         //When
         tansactionRepository.findById(testId);
@@ -90,10 +111,12 @@ public class TransactionRepositoryTest {
     // TODO: add test findAll
      //   @Test
     void findByAll(){
+        
+
         //Given
-        tansactionRepository.save(new Transaction( 100,"Diagn"));
-        tansactionRepository.save(new Transaction(200,"Mor"));
-        tansactionRepository.save(new Transaction(200,"Lo"));
+        tansactionRepository.save(new Transaction( testWallet, 100,"Diagn"));
+        tansactionRepository.save(new Transaction(testWallet,200,"Mor"));
+        tansactionRepository.save(new Transaction(testWallet,200,"Lo"));
 
         //When
         List<Transaction> tansactions = tansactionRepository.findAll();
